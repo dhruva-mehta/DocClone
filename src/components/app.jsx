@@ -1,6 +1,8 @@
 import React from 'react';
 import { Editor, EditorState, RichUtils } from 'draft-js';
 
+import { Editor, EditorState, RichUtils } from 'draft-js';
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -9,25 +11,30 @@ export default class App extends React.Component {
     };
     this.onChange = editorState => this.setState({ editorState });
   }
-
-  onBoldClick() {
+  boldClick() {
     this.onChange(RichUtils.toggleInlineStyle(
-      this.state.editorState,
-      'BOLD',
-    ));
+      this.state.editorState, 'BOLD'));
   }
 
+  italicClick() {
+    this.onChange(RichUtils.toggleInlineStyle(
+      this.state.editorState, 'ITALIC',
+    ));
+  }
+  underClick() {
+    this.onChange(RichUtils.toggleInlineStyle(
+      this.state.editorState, 'UNDERLINE',
+    ));
+  }
   render() {
-    return (
-      <div className="content">
-        <h1>Doc Clone!</h1>
-        <button onClick={() => this.onBoldClick()}>Bold</button>
-        <div className="editor">
-          <Editor
-            editorState={this.state.editorState}
-            onChange={this.onChange}
-          />
-        </div>
-      </div>);
+    return (<div>
+      <h2>Doc Clone</h2>
+      <button onClick={() => this.boldClick()}>Bold</button>
+      <button onClick={() => this.italicClick()}>Italic</button>
+      <button onClick={() => this.underClick()}>Underline</button>
+      <div className="editor">
+        <Editor editorState={this.state.editorState} onChange={this.onChange} />
+      </div>
+    </div>);
   }
 }
