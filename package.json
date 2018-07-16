@@ -55,9 +55,11 @@
   },
   "dependencies": {
     "draft-js": "^0.10.5",
+    "draft-js-color-picker": "^1.0.2",
     "electron-compile": "^6.4.3",
     "electron-devtools-installer": "^2.2.4",
     "electron-squirrel-startup": "^1.0.0",
+    "material-ui": "^0.20.1",
     "react": "^15.6.2",
     "react-dom": "^15.6.2",
     "react-hot-loader": "^3.1.3"
