@@ -33,7 +33,10 @@
       },
       "electronPackagerConfig": {
         "packageManager": "npm",
-        "ignore": [ "server", "server-dist"]
+        "ignore": [
+          "server",
+          "server-dist"
+        ]
       },
       "electronWinstallerConfig": {
         "name": "docclone"
