@@ -4,8 +4,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 </head>
 <body style="overflow: hidden; background-color: rgba(0,0,0,0); margin: 0" >
-  <div id="App"></div>
+  <div id="Signup"></div>
   <link rel="stylesheet" href="./css/main.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
 </body>
 
 <script type="text/jsx">
@@ -14,8 +16,10 @@ import ReactDOM from 'react-dom';
 import {AppContainer} from 'react-hot-loader';
 
 const render = () => {
-  const App = require('./components/app').default;
-  ReactDOM.render(<AppContainer><App /></AppContainer>, document.getElementById('App'));
+  // const App = require('./components/app').default;
+  const Signup = require('./components/signup').default;
+  // ReactDOM.render(<AppContainer><App /></AppContainer>, document.getElementById('App'));
+  ReactDOM.render(<AppContainer><Signup /></AppContainer>, document.getElementById('Signup'))
 }
 
 render();

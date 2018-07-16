@@ -1,8 +1,6 @@
 import React from 'react';
 import { Editor, EditorState, RichUtils } from 'draft-js';
 
-import { Editor, EditorState, RichUtils } from 'draft-js';
-
 export default class App extends React.Component {
   constructor(props) {
     super(props);
