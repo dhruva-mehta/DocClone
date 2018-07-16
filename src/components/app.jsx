@@ -1,4 +1,6 @@
 import React from 'react';
+import { Editor, EditorState, RichUtils } from 'draft-js';
+import '../css/main.css';
 
 import { Editor, EditorState, RichUtils } from 'draft-js';
 
