@@ -9,5 +9,8 @@
 
 .editor{
   border: 1px solid grey;
-  padding: 6px;
+  padding: 10px;
+  height: 300px;
+  margin-left: 5%;
+  margin-right: 5%;
 }
