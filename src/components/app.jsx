@@ -1,6 +1,5 @@
 import React from 'react';
 import { Editor, EditorState, RichUtils } from 'draft-js';
-import '../css/main.css';
 
 export default class App extends React.Component {
   constructor(props) {
