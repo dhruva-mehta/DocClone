@@ -16,9 +16,9 @@ import ReactDOM from 'react-dom';
 import {AppContainer} from 'react-hot-loader';
 const render = () => {
   // const Editor = require('./components/editor').default;
-  const App = require('./components/app').default;
+  const Router = require('./components/Router').default;
   // ReactDOM.render(<AppContainer><Editor /></AppContainer>, document.getElementById('Editor'));
-  ReactDOM.render(<AppContainer><App /></AppContainer>, document.getElementById('App'))
+  ReactDOM.render(<AppContainer><Router /></AppContainer>, document.getElementById('App'))
 }
 
 render();
