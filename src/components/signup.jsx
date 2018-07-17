@@ -43,6 +43,7 @@ export default class Signup extends React.Component {
         email: this.state.email,
       }),
     });
+    console.log("fetch!!!")
   }
 
   handleChange(name, event) {
@@ -88,7 +89,7 @@ export default class Signup extends React.Component {
           margin="normal"
         />
         <br />
-        <button onClick={() => signup()}>Submit</button>
+        <button onClick={() => this.signup()}>Submit</button>
       </form>
     );
   }

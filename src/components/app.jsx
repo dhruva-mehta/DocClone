@@ -1,18 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, Route } from 'react-router-dom';
-import Signup from './Signup';
+import {Route, Switch} from 'react-router-dom';
+import Signup from './signup';
 import Login from './Login';
 import Editor from './Editor';
 
-class App extends React.Component {
+export default class App extends React.Component {
   constructor() {
     super();
     this.state = {}
   }
 
   componentDidMount() {
-    fetch('/login')
+   /*fetch('/login')
     .then(response => response.json())
     .then(json => {
       if (json.success) {
@@ -20,16 +20,18 @@ class App extends React.Component {
       } else {
         this.props.history.push('/signup')
       }
-    })
+    })*/
   }
 
   render() {
+    console.log(this.props.location.pathname);
     return (
-      <div>
-        <Route path="/signup" component={Signup} />
-        <Route path="/login" component={Login} />
-        <Route path="/editor" component={Editor} />
-      </div>
+      <Switch>
+         <Route path="/" component={Signup} />
+         <Route path="/login" component={Login} />
+         <Route path="/editor" component={Editor} />
+      </Switch>
+
     )
   }
 }
