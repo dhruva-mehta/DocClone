@@ -6,6 +6,8 @@
 <body style="overflow: hidden; background-color: rgba(0,0,0,0); margin: 0" >
   <div id="App"></div>
   <link rel="stylesheet" href="./css/main.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
 </body>
 
 <script type="text/jsx">
@@ -13,8 +15,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {AppContainer} from 'react-hot-loader';
 const render = () => {
+  // const Editor = require('./components/editor').default;
   const App = require('./components/app').default;
-  ReactDOM.render(<AppContainer><App /></AppContainer>, document.getElementById('App'));
+  // ReactDOM.render(<AppContainer><Editor /></AppContainer>, document.getElementById('Editor'));
+  ReactDOM.render(<AppContainer><App /></AppContainer>, document.getElementById('App'))
 }
 
 render();
