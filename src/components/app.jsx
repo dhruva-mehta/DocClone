@@ -12,15 +12,16 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
-   /*fetch('/login')
+    console.log("mounted!")
+   fetch('http://localhost:3000/signup')
     .then(response => response.json())
     .then(json => {
       if (json.success) {
         this.props.history.push('/editor')
       } else {
-        this.props.history.push('/signup')
+        this.props.history.push('/editor')
       }
-    })*/
+    })
   }
 
   render() {
