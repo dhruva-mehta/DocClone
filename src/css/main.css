@@ -13,4 +13,9 @@
   height: 300px;
   margin-left: 5%;
   margin-right: 5%;
+  border-radius: 20px;
+}
+
+.btn  {
+  background-color: #6096BA;
 }

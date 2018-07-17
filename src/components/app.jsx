@@ -78,27 +78,23 @@ export default class App extends React.Component {
     return (<div>
       <h2>Doc Clone</h2>
       <div className="toolbar">
-        <button onClick={() => this.boldClick()}>Bold</button>
-        <button onClick={() => this.italicClick()}>Italic</button>
-        <button onClick={() => this.underClick()}>Underline</button>
-        <button onClick={() => this.strikeClick()}>StrikeThrough</button>
-        <button onMouseDown={e => this.toggleInlineStyle(e, 'UPPERCASE')}>abc</button>
-        <button onMouseDown={e => this.toggleInlineStyle(e, 'LOWERCASE')}>ABC</button>
-        <button onMouseDown={e => this.toggleBlockType(e, 'unordered-list-item')}> Unordered List </button>
-        <button onMouseDown={e => this.toggleBlockType(e, 'ordered-list-item')}> Ordered List </button>
-        <button onMouseDown={e => this.toggleBlockType(e, 'header-one')}> H1 </button>
-        <button onMouseDown={e => this.toggleBlockType(e, 'header-two')}> H2</button>
-        <button onMouseDown={e => this.toggleBlockType(e, 'header-three')}> H3 </button>
-        <button onMouseDown={e => this.toggleBlockType(e, 'header-four')}> H4 </button>
-        <button onMouseDown={e => this.toggleBlockType(e, 'header-five')}> H5 </button>
-        <button onMouseDown={e => this.toggleBlockType(e, 'header-six')}> H6 </button>
-
+        <button className="btn" onClick={() => this.boldClick()}>Bold</button>
+        <button className="btn" onClick={() => this.italicClick()}>Italic</button>
+        <button className="btn" onClick={() => this.underClick()}>Underline</button>
+        <button className="btn" onClick={() => this.strikeClick()}>StrikeThrough</button>
+        <button className="btn" onMouseDown={e => this.toggleInlineStyle(e, 'UPPERCASE')}>abc</button>
+        <button className="btn" onMouseDown={e => this.toggleInlineStyle(e, 'LOWERCASE')}>ABC</button>
+        <button className="btn" onMouseDown={e => this.toggleBlockType(e, 'unordered-list-item')}> Unordered List </button>
+        <button className="btn" onMouseDown={e => this.toggleBlockType(e, 'ordered-list-item')}> Ordered List </button>
+        <button className="btn" onMouseDown={e => this.toggleBlockType(e, 'header-one')}> H1 </button>
+        <button className="btn" onMouseDown={e => this.toggleBlockType(e, 'header-two')}> H2</button>
+        <button className="btn" onMouseDown={e => this.toggleBlockType(e, 'header-three')}> H3 </button>
         <ColorPicker
           toggleColor={color => this.picker.addColor(color)}
           presetColors={presetColors}
           color={this.picker.currentColor(this.state.editorState)}
         />
-        <button onClick={this.picker.removeColor}>clear</button>
+        <button className="btn" onClick={this.picker.removeColor}>clear</button>
       </div>
       <div className="editor">
         <Editor
