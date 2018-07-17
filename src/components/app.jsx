@@ -45,25 +45,6 @@ export default class App extends React.Component {
     }
     return 'not-handled';
   }
-  boldClick() {
-    this.onChange(RichUtils.toggleInlineStyle(
-      this.state.editorState, 'BOLD'));
-  }
-  italicClick() {
-    this.onChange(RichUtils.toggleInlineStyle(
-      this.state.editorState, 'ITALIC',
-    ));
-  }
-  underClick() {
-    this.onChange(RichUtils.toggleInlineStyle(
-      this.state.editorState, 'UNDERLINE',
-    ));
-  }
-  strikeClick() {
-    this.onChange(RichUtils.toggleInlineStyle(
-      this.state.editorState, 'STRIKETHROUGH',
-    ));
-  }
 
   toggleInlineStyle(e, inlineStyle) {
     e.preventDefault();
@@ -78,10 +59,10 @@ export default class App extends React.Component {
     return (<div>
       <h2>Doc Clone</h2>
       <div className="toolbar">
-        <button className="btn" onClick={() => this.boldClick()}>Bold</button>
-        <button className="btn" onClick={() => this.italicClick()}>Italic</button>
-        <button className="btn" onClick={() => this.underClick()}>Underline</button>
-        <button className="btn" onClick={() => this.strikeClick()}>StrikeThrough</button>
+        <button className="btn" onClick={e => this.toggleInlineStyle(e, 'BOLD')}>Bold</button>
+        <button className="btn" onClick={e => this.toggleInlineStyle(e, 'ITALIC')}>Italic</button>
+        <button className="btn" onClick={e => this.toggleInlineStyle(e, 'UNDERLINE')}>Underline</button>
+        <button className="btn" onClick={e => this.toggleInlineStyle(e, 'STRIKETHROUGH')}>StrikeThrough</button>
         <button className="btn" onMouseDown={e => this.toggleInlineStyle(e, 'UPPERCASE')}>abc</button>
         <button className="btn" onMouseDown={e => this.toggleInlineStyle(e, 'LOWERCASE')}>ABC</button>
         <button className="btn" onMouseDown={e => this.toggleBlockType(e, 'unordered-list-item')}> Unordered List </button>
