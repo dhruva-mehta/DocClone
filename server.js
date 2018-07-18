@@ -5,14 +5,13 @@ import passport from './backend/passport'
 import auth from './backend/auth'
 const app = express();
 
-app.use(express.static("public"));
-app.use(session({ secret: "tractor" }));
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json())
+app.use(session({ secret: "tractor" })); //secret string is used to hash the cookie
+app.use(bodyParser.urlencoded({ extended: false })); //doesn't matter if the body is json or not
+app.use(bodyParser.json()) // turning post requests into json objects
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/',auth(passport))
+app.use('/',auth(passport)) //used at every single route 
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, error => {

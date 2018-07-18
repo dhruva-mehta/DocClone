@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, Route } from 'react-router-dom';
-import App from './App';
+import { HashRouter as Router, Route } from 'react-router-dom';
+import App from './app';
 
 class Root extends React.Component {
   constructor() {
@@ -12,8 +12,9 @@ class Root extends React.Component {
   render() {
     return (
       <Router>
-        <App />
+        <Route path="/" component={App}/>
       </Router>
     )
   }
 }
+export default Root

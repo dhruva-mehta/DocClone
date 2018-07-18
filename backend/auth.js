@@ -7,10 +7,16 @@ var connect = process.env.MONGODB_URI;
 mongoose.connect(connect);
 
 export default function(passport) {
-//get req for sign up
+
 var validate = function(userObj){
   return (userObj.password === userObj.repeat)
 }
+
+//get req for sign up
+router.get('/login', function(req,res){
+  console.log("in the get req!!")
+  res.json({success: !!req.user})
+})
 //post req for signup
 router.post('/signup', function(req,res) {
   //code to check validation!!
@@ -24,13 +30,12 @@ router.post('/signup', function(req,res) {
     email: req.body.email,
   })
   user.save()
-  .then(save => res.json(save))
+  .then(save => console.log(res.json(save)))
   .catch(err => console.log("Error!:"+ err))
 })
 
 
 router.post('/login', passport.authenticate('local'), function(req, res) {
-  res.redirect('/');
 });
 
 return router;
