@@ -36,6 +36,7 @@ export default class Signup extends React.Component {
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'same-origin', // <- this is mandatory to deal with cookies
       body: JSON.stringify({
         username: this.state.username,
         password: this.state.password,

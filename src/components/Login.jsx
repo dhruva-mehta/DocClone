@@ -19,7 +19,6 @@ import { Redirect } from 'react-router';
 //     width: 200,
 //   },
 // });
-
 export default class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -37,14 +36,17 @@ export default class Login extends React.Component {
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'same-origin', // <- this is mandatory to deal with cookies
       body: JSON.stringify({
         username: this.state.username,
         password: this.state.password
       }),
     })
     .then(resp => {
-      if (resp.status === 200)
+      if (resp.status === 200){
         this.setState({loggedin: true})
+        console.log(resp)
+      }
       else {
         console.log("Theres an Error!:", resp.statusText)
       }

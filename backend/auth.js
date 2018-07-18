@@ -41,5 +41,11 @@ router.post('/login', passport.authenticate('local'), function(req, res) {
   })
 });
 
+router.get('/ping',function(req,res){
+  res.send({
+  user:req.user
+  })
+})
+
 return router;
 }
