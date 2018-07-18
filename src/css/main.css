@@ -13,4 +13,36 @@
   height: 300px;
   margin-left: 5%;
   margin-right: 5%;
+  border-radius: 20px;
+}
+
+.toolbar{
+  border: 3px solid black;
+  display: flex;
+  justify-content: center;
+}
+
+.editorPage{
+  justify-content: : center;
+}
+
+.signUpPage{
+  display: block;
+  border: 2px solid blue;
+  background-color: lightblue;
+  padding: 10px;
+  margin-left: 10%;
+  margin-right: 10%;
+}
+
+.alignRight {
+  text-align: right;
+}
+
+.alignLeft {
+  text-align: left;
+}
+
+.alignCenter {
+  text-align: center;
 }
