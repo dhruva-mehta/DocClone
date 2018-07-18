@@ -121,20 +121,20 @@ export default class App extends React.Component {
       <div className="editorPage">
         <h2>Doc Clone</h2>
         <div className="toolbar">
-          <button className="btn" onClick={e => this.toggleInlineStyle(e, 'BOLD')}>Bold</button>
-          <button className="btn" onClick={e => this.toggleInlineStyle(e, 'ITALIC')}>Italic</button>
-          <button className="btn" onClick={e => this.toggleInlineStyle(e, 'UNDERLINE')}>Underline</button>
-          <button className="btn" onClick={e => this.toggleInlineStyle(e, 'STRIKETHROUGH')}>StrikeThrough</button>
+          <button className="btn" onClick={e => this.toggleInlineStyle(e, 'BOLD')}><i className="fa fa-bold" /></button>
+          <button className="btn" onClick={e => this.toggleInlineStyle(e, 'ITALIC')}><i className="fa fa-italic" /></button>
+          <button className="btn" onClick={e => this.toggleInlineStyle(e, 'UNDERLINE')}><i className="fa fa-underline" /></button>
+          <button className="btn" onClick={e => this.toggleInlineStyle(e, 'STRIKETHROUGH')}><i className="fa fa-strikethrough" /></button>
           <button className="btn" onMouseDown={e => this.toggleInlineStyle(e, 'UPPERCASE')}>abc</button>
           <button className="btn" onMouseDown={e => this.toggleInlineStyle(e, 'LOWERCASE')}>ABC</button>
-          <button className="btn" onMouseDown={e => this.toggleBlockType(e, 'unordered-list-item')}> Unordered List </button>
-          <button className="btn" onMouseDown={e => this.toggleBlockType(e, 'ordered-list-item')}> Ordered List </button>
+          <button className="btn" onMouseDown={e => this.toggleBlockType(e, 'unordered-list-item')}><i className="fa fa-list-ul" /></button>
+          <button className="btn" onMouseDown={e => this.toggleBlockType(e, 'ordered-list-item')}><i className="fa fa-list-ol" /></button>
           <button className="btn" onMouseDown={e => this.toggleBlockType(e, 'header-one')}> H1 </button>
           <button className="btn" onMouseDown={e => this.toggleBlockType(e, 'header-two')}> H2</button>
           <button className="btn" onMouseDown={e => this.toggleBlockType(e, 'header-three')}> H3 </button>
-          <button className="btn" onMouseDown={e => this.toggleBlockType(e, 'right')}> Right </button>
-          <button className="btn" onMouseDown={e => this.toggleBlockType(e, 'left')}> Left</button>
-          <button className="btn" onMouseDown={e => this.toggleBlockType(e, 'center')}> Center </button>
+          <button className="btn" onMouseDown={e => this.toggleBlockType(e, 'left')}><span className="glyphicon glyphicon-align-left" /></button>
+          <button className="btn" onMouseDown={e => this.toggleBlockType(e, 'right')}><span className="glyphicon glyphicon-align-right" /></button>
+          <button className="btn" onMouseDown={e => this.toggleBlockType(e, 'center')}> <span className="glyphicon glyphicon-align-center" /></button>
           <select onChange={e => this.toggleInlineStyle(e, e.target.value)}>
             {numbers.map(item => <option key={item}>{item}</option>)}
           </select>
