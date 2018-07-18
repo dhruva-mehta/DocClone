@@ -19,14 +19,16 @@ passport.serializeUser(function(user, done) {
 });
 
 passport.deserializeUser(function(id, done) {
+  console.log(id)
   User.findById(id, function(err, user) {
+    console.log(user)
     done(err, user);
   });
 });
 
 passport.use(new LocalStrategy(
   function(username, password, done) {
-    User.findOne({ user: username }, function (err, user) {
+    User.findOne({ username: username }, function (err, user) {
       if (err) { return done(err); }
       if (!user) {
         return done(null, false, { message: 'Incorrect username.' });

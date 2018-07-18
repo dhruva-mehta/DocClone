@@ -9,7 +9,7 @@ var connect = process.env.MONGODB_URI;
 mongoose.connect(connect)
 
 var userSchema = mongoose.Schema({
-  name: {
+  username: {
     type: String,
     required: true
   },
@@ -24,15 +24,20 @@ var userSchema = mongoose.Schema({
 })
 
 var docSchema = mongoose.Schema({
+  docName:{
+    type: String,
+    required: true,
+  },
   creator: {
     type: mongoose.Schema.ObjectId,
     ref:
      'User'
   },
-  collaborators: {
-    type: Array,
-    default: [],
-  },
+  collaborators: [{
+    type: mongoose.Schema.ObjectId,
+    ref:
+     'User'
+  }],
   content: {
     type: String,
   },
