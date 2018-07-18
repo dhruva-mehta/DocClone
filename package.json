@@ -63,6 +63,8 @@
     "electron-devtools-installer": "^2.2.4",
     "electron-squirrel-startup": "^1.0.0",
     "es6-promise": "^4.2.4",
+    "material-ui": "^0.20.1",
+    "react-dropdown": "^1.5.0",
     "isomorphic-fetch": "^2.2.1",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
@@ -95,5 +97,5 @@
     "eslint-plugin-react": "^7.10.0",
     "nodemon": "^1.18.2"
   },
-  "proxy":"http://localhost:3000/"
+  "proxy": "http://localhost:3000/"
 }
