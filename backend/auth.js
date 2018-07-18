@@ -14,7 +14,6 @@ var validate = function(userObj){
 
 //get req for sign up
 router.get('/login', function(req,res){
-  console.log("in the get req!!")
   res.json({success: !!req.user})
 })
 //post req for signup
@@ -25,17 +24,21 @@ router.post('/signup', function(req,res) {
     throw 'Passwords do not match!!'
 
   var user = new User({
-    name: req.body.name,
+    username: req.body.username,
     password: req.body.password,
     email: req.body.email,
   })
   user.save()
-  .then(save => console.log(res.json(save)))
+  .then(save =>res.json(save))
   .catch(err => console.log("Error!:"+ err))
 })
 
 
 router.post('/login', passport.authenticate('local'), function(req, res) {
+  res.json({
+    success:!!req.user,
+    user: req.user,
+  })
 });
 
 return router;

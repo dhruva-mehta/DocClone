@@ -11,7 +11,7 @@ app.use(bodyParser.json()) // turning post requests into json objects
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/',auth(passport)) //used at every single route 
+app.use('/', auth(passport)) //used at every single route 
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, error => {

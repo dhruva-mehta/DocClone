@@ -9,7 +9,7 @@ var connect = process.env.MONGODB_URI;
 mongoose.connect(connect)
 
 var userSchema = mongoose.Schema({
-  name: {
+  username: {
     type: String,
     required: true
   },

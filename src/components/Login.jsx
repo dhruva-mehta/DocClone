@@ -2,6 +2,7 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import 'isomorphic-fetch';
 import PropTypes from 'prop-types';
+import { Redirect } from 'react-router';
 // import { withStyles } from '@material-ui/core/styles';
 //
 // const styles = theme => ({
@@ -19,56 +20,71 @@ import PropTypes from 'prop-types';
 //   },
 // });
 
-export default class Signup extends React.Component {
+export default class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: '',
+      username: '',
       password: '',
-      email: '',
-      repeat: '',
+      loggedin: false,
+      register: false,
     };
   }
-// Signup function to send to authentication route
-  signup() {
-    fetch('/signup', {
+
+  login() {
+    fetch('http://localhost:3000/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        name: this.state.name,
-        password: this.state.password,
-        repeat: this.state.repeat,
-        email: this.state.email,
+        username: this.state.username,
+        password: this.state.password
       }),
-    });
+    })
+    .then(resp => {
+      if (resp.status === 200)
+        this.setState({loggedin: true})
+      else {
+        console.log("Theres an Error!:", resp.statusText)
+      }
+    })
+    .catch(err => {console.log(err)})
   }
 
   handleChange(name, event) {
+    console.log("username: " + this.state.username)
+    console.log("password: " + this.state.password)
     this.setState({
       [name]: event.target.value,
     });
   }
 
+  toSignUp(){
+    this.props.history.push('/signup')
+  }
+
   render() {
     const classes = this.props;
+    if (this.state.loggedin){
+      this.props.history.push({
+             pathname:"/docPortal",
+             state:{
+                 name:this.state.username //access with: this.props.location.state.name
+              }
+            });
+    }
+    else if (this.state.register) {
+      return <Redirect to='/signup'/>
+    }
     return (
       <form noValidate autoComplete="off" >
         <TextField
           id="name"
           label="Name"
           className={classes.textField}
-          value={this.state.name}
-          onChange={event => this.handleChange('name', event)}
-          margin="normal"
-        />
-        <TextField
-          id="email"
-          label="Email"
-          className={classes.textField}
-          value={this.state.email}
-          onChange={event => this.handleChange('email', event)}
+          value={this.state.username}
+          onChange={event => this.handleChange('username', event)}
           margin="normal"
         />
         <TextField
@@ -79,22 +95,15 @@ export default class Signup extends React.Component {
           onChange={event => this.handleChange('password', event)}
           margin="normal"
         />
-        <TextField
-          id="repeat"
-          label="Repeat your password"
-          className={classes.textField}
-          value={this.state.repeat}
-          onChange={event => this.handleChange('repeat', event)}
-          margin="normal"
-        />
         <br />
-        <button onClick={() => signup()}>Submit</button>
+        <button onClick={() => this.login()}>Login!</button>
+        <button onClick={()=>this.toSignUp()}>Register!</button>
       </form>
     );
   }
 }
 
-Signup.propTypes = {
+Login.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 

@@ -23,7 +23,7 @@ export default class Signup extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: '',
+      username: '',
       password: '',
       email: '',
       repeat: '',
@@ -37,19 +37,31 @@ export default class Signup extends React.Component {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        name: this.state.name,
+        username: this.state.username,
         password: this.state.password,
         repeat: this.state.repeat,
         email: this.state.email,
       }),
-    });
-    console.log("fetch!!!")
+    })
+    .then((resp)=>{
+      if(resp.status===200){
+        console.log("passed!")
+        this.props.history.push('/login')
+      }
+      else{
+        throw "The sign up did not work, please try again."
+      }
+    })
   }
 
   handleChange(name, event) {
     this.setState({
       [name]: event.target.value,
     });
+  }
+
+  toLogin(){
+    this.props.history.push('/login')
   }
 
   render() {
@@ -60,8 +72,8 @@ export default class Signup extends React.Component {
           id="name"
           label="Name"
           className={classes.textField}
-          value={this.state.name}
-          onChange={event => this.handleChange('name', event)}
+          value={this.state.username}
+          onChange={event => this.handleChange('username', event)}
           margin="normal"
         />
         <TextField
@@ -90,6 +102,7 @@ export default class Signup extends React.Component {
         />
         <br />
         <button onClick={() => this.signup()}>Submit</button>
+        <button onClick={() => this.toLogin()}>Back to Login</button>
       </form>
     );
   }
