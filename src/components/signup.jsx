@@ -23,7 +23,7 @@ export default class Signup extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: '',
+      username: '',
       password: '',
       email: '',
       repeat: '',
@@ -36,14 +36,23 @@ export default class Signup extends React.Component {
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'same-origin', // <- this is mandatory to deal with cookies
       body: JSON.stringify({
-        name: this.state.name,
+        username: this.state.username,
         password: this.state.password,
         repeat: this.state.repeat,
         email: this.state.email,
       }),
-    });
-    console.log("fetch!!!")
+    })
+    .then((resp)=>{
+      if(resp.status===200){
+        console.log("passed!")
+        this.props.history.push('/login')
+      }
+      else{
+        throw "The sign up did not work, please try again."
+      }
+    })
   }
 
   handleChange(name, event) {
@@ -52,47 +61,50 @@ export default class Signup extends React.Component {
     });
   }
 
+  toLogin(){
+    this.props.history.push('/login')
+  }
+
   render() {
     const classes = this.props;
     return (
-      <div className="signUpPage">
-        <form noValidate autoComplete="off" >
-          <TextField
-            id="name"
-            label="Name"
-            className={classes.textField}
-            value={this.state.name}
-            onChange={event => this.handleChange('name', event)}
-            margin="normal"
-          />
-          <TextField
-            id="email"
-            label="Email"
-            className={classes.textField}
-            value={this.state.email}
-            onChange={event => this.handleChange('email', event)}
-            margin="normal"
-          />
-          <TextField
-            id="password"
-            label="Password"
-            className={classes.textField}
-            value={this.state.password}
-            onChange={event => this.handleChange('password', event)}
-            margin="normal"
-          />
-          <TextField
-            id="repeat"
-            label="Repeat your password"
-            className={classes.textField}
-            value={this.state.repeat}
-            onChange={event => this.handleChange('repeat', event)}
-            margin="normal"
-          />
-          <br />
-          <button onClick={() => this.signup()}>Submit</button>
-        </form>
-      </div>
+      <form noValidate autoComplete="off" >
+        <TextField
+          id="name"
+          label="Name"
+          className={classes.textField}
+          value={this.state.username}
+          onChange={event => this.handleChange('username', event)}
+          margin="normal"
+        />
+        <TextField
+          id="email"
+          label="Email"
+          className={classes.textField}
+          value={this.state.email}
+          onChange={event => this.handleChange('email', event)}
+          margin="normal"
+        />
+        <TextField
+          id="password"
+          label="Password"
+          className={classes.textField}
+          value={this.state.password}
+          onChange={event => this.handleChange('password', event)}
+          margin="normal"
+        />
+        <TextField
+          id="repeat"
+          label="Repeat your password"
+          className={classes.textField}
+          value={this.state.repeat}
+          onChange={event => this.handleChange('repeat', event)}
+          margin="normal"
+        />
+        <br />
+        <button onClick={() => this.signup()}>Submit</button>
+        <button onClick={() => this.toLogin()}>Back to Login</button>
+      </form>
     );
   }
 }
