@@ -13,7 +13,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 
 
-export default class docPortal extends React.Component{
+
+export default class docPortal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -23,12 +24,20 @@ export default class docPortal extends React.Component{
     };
   }
 
-  handleChange(name, event) {
+  componentDidMount() {
+    fetch('http://localhost:3000/doc', {
+      credentials: 'same-origin',
+    })
+    .then(resp => resp.json())
+    .then(json =>
+    this.setState({ docObjList: json }));
+  }
+  ange(name, event) {
     this.setState({
       [name]: event.target.value,
     });
   }
-
+  
   componentWillMount(){
     fetch('http://localhost:3000/doc',{
         credentials: 'same-origin',
@@ -59,12 +68,13 @@ export default class docPortal extends React.Component{
           docName: this.state.newDocName,
         }),
       })
-      .then(resp=> {if (resp.status === 200)
-        console.log("it worked?")
-        else{
-          console.log("Error....")
+      .then(resp => {
+        if (resp.status === 200){
+          console.log('it worked?')
+        } else {
+          console.log('Error....')
         }
-      })
+      });
     }
   }
 
@@ -104,9 +114,8 @@ export default class docPortal extends React.Component{
             <ListItem button onClick={()=>this.toEditor()}><ListItemText primary={doc.docName}/></ListItem>
           )}
         </List>
-
       </div>
-    )
+    );
   }
 
 }

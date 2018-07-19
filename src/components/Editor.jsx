@@ -1,6 +1,7 @@
 import React from 'react';
 import { Editor, EditorState, RichUtils } from 'draft-js';
 import ColorPicker, { colorPickerPlugin } from 'draft-js-color-picker';
+import { Link } from 'react-router-dom';
 
 function myBlockStyleFn(contentBlock) {
   const type = contentBlock.getType();
@@ -11,7 +12,7 @@ function myBlockStyleFn(contentBlock) {
   } return 'alignLeft';
 }
 
-const numbers = ['8px', '10px', '12px', '14px', '16px', '18px', '20px', '22px', '24px'];
+const numbers = ['8px', '10px', '12px', '14px', '18px', '24px', '30px', '36px', '48px'];
 const fonts = ['Times New Roman', 'Arial', 'Helvetica', 'Courier', 'Verdana', 'Georgia', 'Comic Sans MS', 'Impact'];
 
 const styleMap = {
@@ -33,19 +34,19 @@ const styleMap = {
   '14px': {
     fontSize: '14px',
   },
-  '16px': {
+  '18px': {
     fontSize: '16px',
   },
-  '18px': {
+  '24px': {
     fontSize: '18px',
   },
-  '20px': {
+  '30px': {
     fontSize: '20px',
   },
-  '22px': {
+  '36px': {
     fontSize: '22px',
   },
-  '24px': {
+  '48px': {
     fontSize: '24px',
   },
   'Times New Roman': {
@@ -95,6 +96,7 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       editorState: EditorState.createEmpty(),
+      doc: this.props.location.state.doc
     };
     this.onChange = editorState => this.setState({ editorState });
     this.getEditorState = () => this.state.editorState;
@@ -119,23 +121,24 @@ export default class App extends React.Component {
   render() {
     return (
       <div className="editorPage">
-        <h2>Doc Clone</h2>
+        <h2>{this.state.doc.docName}</h2>
         <div className="toolbar">
+
           <button className="button icon-left" onClick={()=>this.props.history.goBack()}>Back</button>
-          <button className="btn" onClick={e => this.toggleInlineStyle(e, 'BOLD')}>Bold</button>
-          <button className="btn" onClick={e => this.toggleInlineStyle(e, 'ITALIC')}>Italic</button>
-          <button className="btn" onClick={e => this.toggleInlineStyle(e, 'UNDERLINE')}>Underline</button>
-          <button className="btn" onClick={e => this.toggleInlineStyle(e, 'STRIKETHROUGH')}>StrikeThrough</button>
+          <button className="btn" onClick={e => this.toggleInlineStyle(e, 'BOLD')}><i className="fa fa-bold" /></button>
+          <button className="btn" onClick={e => this.toggleInlineStyle(e, 'ITALIC')}><i className="fa fa-italic" /></button>
+          <button className="btn" onClick={e => this.toggleInlineStyle(e, 'UNDERLINE')}><i className="fa fa-underline" /></button>
+          <button className="btn" onClick={e => this.toggleInlineStyle(e, 'STRIKETHROUGH')}><i className="fa fa-strikethrough" /></button>
           <button className="btn" onMouseDown={e => this.toggleInlineStyle(e, 'UPPERCASE')}>abc</button>
           <button className="btn" onMouseDown={e => this.toggleInlineStyle(e, 'LOWERCASE')}>ABC</button>
-          <button className="btn" onMouseDown={e => this.toggleBlockType(e, 'unordered-list-item')}> Unordered List </button>
-          <button className="btn" onMouseDown={e => this.toggleBlockType(e, 'ordered-list-item')}> Ordered List </button>
+          <button className="btn" onMouseDown={e => this.toggleBlockType(e, 'unordered-list-item')}><i className="fa fa-list-ul" /></button>
+          <button className="btn" onMouseDown={e => this.toggleBlockType(e, 'ordered-list-item')}><i className="fa fa-list-ol" /></button>
           <button className="btn" onMouseDown={e => this.toggleBlockType(e, 'header-one')}> H1 </button>
           <button className="btn" onMouseDown={e => this.toggleBlockType(e, 'header-two')}> H2</button>
           <button className="btn" onMouseDown={e => this.toggleBlockType(e, 'header-three')}> H3 </button>
-          <button className="btn" onMouseDown={e => this.toggleBlockType(e, 'right')}> Right </button>
-          <button className="btn" onMouseDown={e => this.toggleBlockType(e, 'left')}> Left</button>
-          <button className="btn" onMouseDown={e => this.toggleBlockType(e, 'center')}> Center </button>
+          <button className="btn" onMouseDown={e => this.toggleBlockType(e, 'left')}><span className="glyphicon glyphicon-align-left" /></button>
+          <button className="btn" onMouseDown={e => this.toggleBlockType(e, 'right')}><span className="glyphicon glyphicon-align-right" /></button>
+          <button className="btn" onMouseDown={e => this.toggleBlockType(e, 'center')}> <span className="glyphicon glyphicon-align-center" /></button>
           <select onChange={e => this.toggleInlineStyle(e, e.target.value)}>
             {numbers.map(item => <option key={item}>{item}</option>)}
           </select>
@@ -157,6 +160,9 @@ export default class App extends React.Component {
             customStyleMap={styleMap}
             blockStyleFn={myBlockStyleFn}
           />
+        </div>
+        <div>
+          <button><Link to={{ pathname: '/docPortal' }}>Back to portal</Link></button>
         </div>
       </div>
     );
