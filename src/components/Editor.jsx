@@ -1,6 +1,7 @@
 import React from 'react';
 import { Editor, EditorState, RichUtils } from 'draft-js';
 import ColorPicker, { colorPickerPlugin } from 'draft-js-color-picker';
+import { Link } from 'react-router-dom';
 
 function myBlockStyleFn(contentBlock) {
   const type = contentBlock.getType();
@@ -11,7 +12,7 @@ function myBlockStyleFn(contentBlock) {
   } return 'alignLeft';
 }
 
-const numbers = ['8px', '10px', '12px', '14px', '16px', '18px', '20px', '22px', '24px'];
+const numbers = ['8px', '10px', '12px', '14px', '18px', '24px', '30px', '36px', '48px'];
 const fonts = ['Times New Roman', 'Arial', 'Helvetica', 'Courier', 'Verdana', 'Georgia', 'Comic Sans MS', 'Impact'];
 
 const styleMap = {
@@ -33,19 +34,19 @@ const styleMap = {
   '14px': {
     fontSize: '14px',
   },
-  '16px': {
+  '18px': {
     fontSize: '16px',
   },
-  '18px': {
+  '24px': {
     fontSize: '18px',
   },
-  '20px': {
+  '30px': {
     fontSize: '20px',
   },
-  '22px': {
+  '36px': {
     fontSize: '22px',
   },
-  '24px': {
+  '48px': {
     fontSize: '24px',
   },
   'Times New Roman': {
@@ -95,6 +96,7 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       editorState: EditorState.createEmpty(),
+      doc: this.props.location.state.doc
     };
     this.onChange = editorState => this.setState({ editorState });
     this.getEditorState = () => this.state.editorState;
@@ -119,7 +121,7 @@ export default class App extends React.Component {
   render() {
     return (
       <div className="editorPage">
-        <h2>Doc Clone</h2>
+        <h2>{this.state.doc.docName}</h2>
         <div className="toolbar">
           <button className="btn" onClick={e => this.toggleInlineStyle(e, 'BOLD')}><i className="fa fa-bold" /></button>
           <button className="btn" onClick={e => this.toggleInlineStyle(e, 'ITALIC')}><i className="fa fa-italic" /></button>
@@ -156,6 +158,9 @@ export default class App extends React.Component {
             customStyleMap={styleMap}
             blockStyleFn={myBlockStyleFn}
           />
+        </div>
+        <div>
+          <button><Link to={{ pathname: '/docPortal' }}>Back to portal</Link></button>
         </div>
       </div>
     );
