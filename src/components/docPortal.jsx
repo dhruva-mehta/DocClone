@@ -7,15 +7,20 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import { Link } from 'react-router-dom';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import Divider from '@material-ui/core/Divider';
+
+
 
 export default class docPortal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: this.props.location.state.name,
-      newDocName: '',
-      docObjList: [],
+      username: "",
+      newDocName:"",
+      docObjList:[]
     };
   }
 
@@ -32,9 +37,27 @@ export default class docPortal extends React.Component {
       [name]: event.target.value,
     });
   }
+  
+  componentWillMount(){
+    fetch('http://localhost:3000/doc',{
+        credentials: 'same-origin',
+    })
+    .then(resp=>resp.json())
+    .then(json=>{
+      console.log(json)
+    this.setState({docObjList: json})
+  })
 
-  newDoc() {
-    if (this.state.newDocName.length !== 0) {
+    fetch('http://localhost:3000/ping',{
+      credentials: 'same-origin',
+    })
+    .then(resp => resp.json())
+    .then(json=>
+      this.setState({username: json.user.username}))
+  }
+
+  newDoc(){
+    if(this.state.newDocName.length !== 0){
       fetch('http://localhost:3000/doc/create', {
         method: 'POST',
         headers: {
@@ -54,11 +77,13 @@ export default class docPortal extends React.Component {
       });
     }
   }
-  //added function to redirect to editord
-openDoc(docId) {
 
-}
-  render() {
+  toEditor(){
+    this.props.history.push('/editor')
+    console.log(this.props.history)
+  }
+
+  render(){
     const classes = this.props;
     return (
       <div className={classes.root}>
@@ -81,13 +106,14 @@ openDoc(docId) {
           margin="normal"
         />
         <button onClick={() => this.newDoc()}>Create New Doc!</button>
-        {/* Griffen's changes to make list appear */}
-        <div>
-          Document should be here
-          {this.state.docObjList.map(doc =>
-            (<div><button key={doc.docName} className="docBtn">
-              <Link to={{ pathname: '/editor', state: { doc: doc }}}>{doc.docName}</Link></button></div>))}
-        </div>
+        <Typography variant="title" color="inherit">
+          Your Documents!
+        </Typography>
+        <List>
+          {this.state.docObjList.map(doc=>
+            <ListItem button onClick={()=>this.toEditor()}><ListItemText primary={doc.docName}/></ListItem>
+          )}
+        </List>
       </div>
     );
   }
