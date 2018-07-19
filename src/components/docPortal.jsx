@@ -7,12 +7,17 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import Divider from '@material-ui/core/Divider';
+
 
 export default class docPortal extends React.Component{
   constructor(props) {
     super(props);
     this.state = {
-      username: this.props.location.state.name,
+      username: "",
       newDocName:"",
       docObjList:[]
     };
@@ -24,13 +29,22 @@ export default class docPortal extends React.Component{
     });
   }
 
-  componentDidMount(){
+  componentWillMount(){
     fetch('http://localhost:3000/doc',{
         credentials: 'same-origin',
     })
     .then(resp=>resp.json())
+    .then(json=>{
+      console.log(json)
+    this.setState({docObjList: json})
+  })
+
+    fetch('http://localhost:3000/ping',{
+      credentials: 'same-origin',
+    })
+    .then(resp => resp.json())
     .then(json=>
-    this.setState({docObjList: json}))
+      this.setState({username: json.user.username}))
   }
 
   newDoc(){
@@ -52,6 +66,11 @@ export default class docPortal extends React.Component{
         }
       })
     }
+  }
+
+  toEditor(){
+    this.props.history.push('/editor')
+    console.log(this.props.history)
   }
 
   render(){
@@ -77,7 +96,15 @@ export default class docPortal extends React.Component{
           margin="normal"
         />
         <button onClick={() => this.newDoc()}>Create New Doc!</button>
-        {this.state.docObjList.map(doc=><li>{doc.docName}</li>)}
+        <Typography variant="title" color="inherit">
+          Your Documents!
+        </Typography>
+        <List>
+          {this.state.docObjList.map(doc=>
+            <ListItem button onClick={()=>this.toEditor()}><ListItemText primary={doc.docName}/></ListItem>
+          )}
+        </List>
+
       </div>
     )
   }

@@ -121,6 +121,7 @@ export default class App extends React.Component {
       <div className="editorPage">
         <h2>Doc Clone</h2>
         <div className="toolbar">
+          <button className="button icon-left" onClick={()=>this.props.history.goBack()}>Back</button>
           <button className="btn" onClick={e => this.toggleInlineStyle(e, 'BOLD')}>Bold</button>
           <button className="btn" onClick={e => this.toggleInlineStyle(e, 'ITALIC')}>Italic</button>
           <button className="btn" onClick={e => this.toggleInlineStyle(e, 'UNDERLINE')}>Underline</button>
