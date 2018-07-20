@@ -39,7 +39,7 @@ var docSchema = mongoose.Schema({
      'User'
   }],
   content: {
-    type: String,
+    type:String,
   },
 })
 
