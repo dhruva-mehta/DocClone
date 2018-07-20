@@ -6,7 +6,10 @@ import auth from './auth'
 import routes from './routes'
 var MongoStore = require('connect-mongo')(session);
 var mongoose = require('mongoose');
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
 const app = express();
+const Doc = require('../models/models').Doc
 
 app.use(session({ secret: "tractor",
 store: new MongoStore({mongooseConnection: require('mongoose').connection}),
@@ -19,6 +22,15 @@ app.use(passport.session());
 app.use('/', auth(passport)) //used at every single route
 app.use('/', routes) //used at every single route
 
+//web sockets!!
+io.on('connection', socket => {
+  socket.on("sync", data => {
+    Doc.findByIdAndUpdate(data.id, {content: data.content})
+    .then(doc => {
+      io.to(data.id).emit("sync", data.content)
+    })
+  })
+})
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, error => {

@@ -11,9 +11,10 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
-import _ from 'underscore'
+import _ from 'underscore';
+import io from 'socket.io-client';
 
-
+let socket = io("http://localhost:3000")
 
 export default class docPortal extends React.Component {
   constructor(props) {
@@ -86,7 +87,8 @@ export default class docPortal extends React.Component {
     this.props.history.push({
            pathname:"/editor",
            state:{
-               id:id //access with: this.props.location.state.name
+               id: id, //access with: this.props.location.state.name
+               io: socket //Make this socket???
             }
           });
     console.log(this.props.history)
