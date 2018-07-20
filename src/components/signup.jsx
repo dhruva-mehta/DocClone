@@ -29,6 +29,7 @@ export default class Signup extends React.Component {
       repeat: '',
     };
   }
+
 // Signup function to send to authentication route
   signup() {
     fetch('http://localhost:3000/signup', {

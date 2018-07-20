@@ -6,11 +6,14 @@ import Login from './Login';
 import Editor from './Editor';
 import Particles from 'react-particles-js'
 import docPortal from './docPortal';
+import io from 'socket.io-client';
 
 export default class App extends React.Component {
   constructor() {
     super();
-    this.state = {}
+    this.state = {
+      connecting: true,
+    };
   }
 
   componentDidMount() {
@@ -23,7 +26,10 @@ export default class App extends React.Component {
       } else {
         this.props.history.push('/login')
       }
-    })
+    });
+    this.socket = io('http://localhost:1337');
+    this.socket.on('connect', () => this.setState({ connecting: null }));
+    this.socket.on('disconnect', () => this.setState({ connecting: true }));
   }
 
   render() {

@@ -7,6 +7,10 @@ import routes from './routes'
 var MongoStore = require('connect-mongo')(session);
 var mongoose = require('mongoose');
 const app = express();
+const server = http.Server(app);
+import socketio from 'socket.io';
+const io = socketio(server);
+
 
 app.use(session({ secret: "tractor",
 store: new MongoStore({mongooseConnection: require('mongoose').connection}),
@@ -18,7 +22,7 @@ app.use(passport.session());
 
 app.use('/', auth(passport)) //used at every single route
 app.use('/', routes) //used at every single route
-
+socket.on('connected', )
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, error => {

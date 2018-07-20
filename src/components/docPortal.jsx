@@ -11,7 +11,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
-
+import io from 'socket.io';
 
 
 export default class docPortal extends React.Component {
@@ -36,8 +36,9 @@ export default class docPortal extends React.Component {
     this.setState({
       [name]: event.target.value,
     });
+    socket.emit('connected', function())
   }
-  
+
   componentWillMount(){
     fetch('http://localhost:3000/doc',{
         credentials: 'same-origin',
@@ -83,7 +84,7 @@ export default class docPortal extends React.Component {
     console.log(this.props.history)
   }
 
-  render(){
+  render() {
     const classes = this.props;
     return (
       <div className={classes.root}>
@@ -110,8 +111,9 @@ export default class docPortal extends React.Component {
           Your Documents!
         </Typography>
         <List>
-          {this.state.docObjList.map(doc=>
-            <ListItem button onClick={()=>this.toEditor()}><ListItemText primary={doc.docName}/></ListItem>
+          {this.state.docObjList.map(doc =>
+            (<ListItem button key={doc._id} onClick={() => this.toEditor()}>
+              <ListItemText primary={doc.docName} /></ListItem>),
           )}
         </List>
       </div>

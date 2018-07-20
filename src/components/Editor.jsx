@@ -2,6 +2,7 @@ import React from 'react';
 import { Editor, EditorState, RichUtils } from 'draft-js';
 import ColorPicker, { colorPickerPlugin } from 'draft-js-color-picker';
 import { Link } from 'react-router-dom';
+import io from 'socket.io';
 
 function myBlockStyleFn(contentBlock) {
   const type = contentBlock.getType();
@@ -96,9 +97,12 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       editorState: EditorState.createEmpty(),
-      doc: this.props.location.state.doc
+      // doc: this.props.location.state.doc
     };
-    this.onChange = editorState => this.setState({ editorState });
+    this.onChange = (editorState) => {
+      this.setState({ editorState });
+      socket.emit('sync', { docId, editorState });
+    };
     this.getEditorState = () => this.state.editorState;
     this.picker = colorPickerPlugin(this.onChange, this.getEditorState);
   }
@@ -112,19 +116,11 @@ export default class App extends React.Component {
     e.preventDefault();
     this.onChange(RichUtils.toggleBlockType(this.state.editorState, blockType));
   }
-
-  // toggleFontSize(e, size) {
-  //   e.preventDefault();
-  //   this.onChange();
-  // }
-
   render() {
     return (
       <div className="editorPage">
-        <h2>{this.state.doc.docName}</h2>
+        {/* <h2>{this.state.doc.docName}</h2> */}
         <div className="toolbar">
-
-          <button className="button icon-left" onClick={()=>this.props.history.goBack()}>Back</button>
           <button className="btn" onClick={e => this.toggleInlineStyle(e, 'BOLD')}><i className="fa fa-bold" /></button>
           <button className="btn" onClick={e => this.toggleInlineStyle(e, 'ITALIC')}><i className="fa fa-italic" /></button>
           <button className="btn" onClick={e => this.toggleInlineStyle(e, 'UNDERLINE')}><i className="fa fa-underline" /></button>
@@ -163,6 +159,9 @@ export default class App extends React.Component {
         </div>
         <div>
           <button><Link to={{ pathname: '/docPortal' }}>Back to portal</Link></button>
+          <button className="btn">
+            <i className="fa fa-floppy-o" />
+          </button>
         </div>
       </div>
     );
