@@ -12,9 +12,6 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 import _ from 'underscore';
-import io from 'socket.io-client';
-
-let socket = io("http://localhost:3000")
 
 export default class docPortal extends React.Component {
   constructor(props) {
@@ -49,7 +46,6 @@ export default class docPortal extends React.Component {
     })
     .then(resp=>resp.json())
     .then(json=>{
-      console.log(json)
     this.setState({docObjList: json})
   })
 
@@ -73,13 +69,11 @@ export default class docPortal extends React.Component {
           docName: this.state.newDocName,
         }),
       })
-      .then(resp => {
-        if (resp.status === 200){
-          console.log('it worked?')
-        } else {
-          console.log('Error....')
-        }
-      });
+      .then(resp => resp.json())
+      .then(json => {
+        let newArr = this.state.docObjList.concat([json])
+        this.setState({docObjList: newArr})
+      })
     }
   }
 
@@ -87,11 +81,10 @@ export default class docPortal extends React.Component {
     this.props.history.push({
            pathname:"/editor",
            state:{
-               id: id, //access with: this.props.location.state.name
-               io: socket //Make this socket???
-            }
+             user: this.state.username,
+               docid: id, //access with: this.props.location.state.docName
+             }
           });
-    console.log(this.props.history)
   }
 
   share(){

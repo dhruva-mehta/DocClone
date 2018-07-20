@@ -18,12 +18,16 @@
 
 .toolbar{
   border: 3px solid black;
-  display: flex;
+  display: inline-block;
   justify-content: center;
 }
 
 .editorPage{
-  justify-content: : center;
+  display:block;
+  position:fixed;
+  height:100%;
+  overflow:auto;
+  background: linear-gradient(#ddd6f3,#faaca8);
 }
 
 .signUpPage{
@@ -50,4 +54,9 @@
   padding-left: 5px;
   padding-right: 5px;
   width: 150px;
+}
+
+.limitbtn{
+  max-height: 34px;
+  display: inline-flex;
 }

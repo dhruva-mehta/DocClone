@@ -6,9 +6,9 @@ import auth from './auth'
 import routes from './routes'
 var MongoStore = require('connect-mongo')(session);
 var mongoose = require('mongoose');
+const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
-const app = express();
 const Doc = require('../models/models').Doc
 
 app.use(session({ secret: "tractor",
@@ -19,21 +19,29 @@ app.use(bodyParser.json()) // turning post requests into json objects
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.get('/', (req, res) => {
+  res.send('hello')
+})
+
 app.use('/', auth(passport)) //used at every single route
 app.use('/', routes) //used at every single route
 
 //web sockets!!
 io.on('connection', socket => {
   socket.on("sync", data => {
-    Doc.findByIdAndUpdate(data.id, {content: data.content})
-    .then(doc => {
-      io.to(data.id).emit("sync", data.content)
+    socket.to(data.id).emit("sync", data.content)
+  })
+  socket.on('join', docid => {
+    socket.join(docid)
+    io.in(docid).clients((err, clientArray) => {
+      console.log(clientArray.length)
     })
   })
 })
 
+
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, error => {
+server.listen(PORT, error => {
   error
   ? console.error(error)
   : console.info(`==> 🌎 Listening on port ${PORT}. Visit http://localhost:${PORT}/ in your browser.`);

@@ -19,7 +19,6 @@ router.get('/login', function(req,res){
 //post req for signup
 router.post('/signup', function(req,res) {
   //code to check validation!!
-  console.log(req.body)
   if (!validate(req.body))
     throw 'Passwords do not match!!'
 

@@ -38,9 +38,14 @@ var docSchema = mongoose.Schema({
     ref:
      'User'
   }],
-  content: {
-    type:String,
-  },
+  file: [{
+    content: {
+      type:String,
+    },
+    date: {
+      type: Date,
+    }
+  }]
 })
 
 var User = mongoose.model('User', userSchema);

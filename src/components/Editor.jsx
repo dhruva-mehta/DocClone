@@ -98,42 +98,46 @@ export default class App extends React.Component {
     this.state = {
       title: "",
       editorState: EditorState.createEmpty(),
-      docid: ""
+      docid: "",
+      socket: io("http://localhost:3000"),
+      history: [],
+
     //  doc: this.props.location.state.doc
     };
+
+
     this.onChange = editorState => {
-      this.setState({ editorState });
-      this.props.location.state.io.on('connection', socket => {
-        socket.emit("sync",{id: this.state.docid,
-       content: JSON.stringify(convertToRaw(this.state.editorState.getCurrentContent())) } )
-      })
+      this.setState({ editorState }, () => {
+        this.state.socket.emit("sync", {
+          id: this.props.location.state.docid,
+          content: JSON.stringify(convertToRaw(this.state.editorState.getCurrentContent()))
+        })
+      });
     }
     this.getEditorState = () => this.state.editorState;
     this.picker = colorPickerPlugin(this.onChange, this.getEditorState);
   }
 
   componentDidMount(){
-    let self = "this";
-    console.log(  this.props.location.state.io)
-      this.props.location.state.io.on('connection', socket => {
-        socket.join(this.state.docid)
-        socket.on("sync",data=> {
-          self.setState({editorState: EditorState.createWithContent(convertFromRaw(JSON.parse(data.content)))} )
-        })
-      })
-    fetch('http://localhost:3000/doc/find?_id='+this.props.location.state.id, {
+    let self = this;
+    this.state.socket.on('connect',() => {
+      this.state.socket.emit('join', this.props.location.state.docid)
+    })
+    this.state.socket.on("sync", (content) => {
+      self.setState({editorState: EditorState.createWithContent(convertFromRaw(JSON.parse(content)))} )
+    })
+    fetch('http://localhost:3000/doc/find?_id='+this.props.location.state.docid, {
       credentials: 'same-origin' // <- this is mandatory to deal with cookies
     })
     .then(resp => resp.json())
     .then(json =>{
-      console.log(json.content);
-      this.setState({title:json.docName, docid: json._id })
-      if(json.content){
-        console.log("rv there yet")
-        console.log(json.content)
+      this.setState({title:json.docName, docid: json._id, history: json.file })
+      let index = json.file.length - 1;
+      let curContent = json.file[index].content
+      if(curContent){
         // var blocks = convertFromRaw(json.content);
         this.setState({
-          editorState: EditorState.createWithContent(convertFromRaw(JSON.parse(json.content))),
+          editorState: EditorState.createWithContent(convertFromRaw(JSON.parse(curContent))),
         })
       }
     }
@@ -165,12 +169,11 @@ export default class App extends React.Component {
       },
       credentials: 'same-origin', // <- this is mandatory to deal with cookies
       body: JSON.stringify({
-        _id: this.props.location.state.id,
+        _id: this.props.location.state.docid,
         content: JSON.stringify(saveContent),
       })
     })
     .then(resp=>resp.json())
-    .then(json=>console.log('it worked!'+ json))
   }
 
 
@@ -201,12 +204,14 @@ export default class App extends React.Component {
           <select onChange={e => this.toggleInlineStyle(e, e.target.value)}>
             {fonts.map(item => <option key={item}>{item}</option>)}
           </select>
-          <ColorPicker
+          <button className="limitbtn">Color:<ColorPicker
             toggleColor={color => this.picker.addColor(color)}
             presetColors={presetColors}
             color={this.picker.currentColor(this.state.editorState)}
-          />
+          /></button>
           <button onClick={this.picker.removeColor}>clear</button>
+
+
         </div>
         <div className="editor">
           <Editor
@@ -216,6 +221,9 @@ export default class App extends React.Component {
             customStyleMap={styleMap}
             blockStyleFn={myBlockStyleFn}
           />
+        </div>
+        <div>
+          <h4>Revision History</h4>
         </div>
       </div>
     );
