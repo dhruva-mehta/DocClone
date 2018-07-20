@@ -7,16 +7,11 @@ import routes from './routes'
 var MongoStore = require('connect-mongo')(session);
 var mongoose = require('mongoose');
 const server = require('http').Server(app);
-const io = require('socket.io')(server);
 const app = express();
-<<<<<<< HEAD
-const server = http.Server(app);
 import socketio from 'socket.io';
 const io = socketio(server);
-
-=======
 const Doc = require('../models/models').Doc
->>>>>>> master
+
 
 app.use(session({ secret: "tractor",
 store: new MongoStore({mongooseConnection: require('mongoose').connection}),
@@ -28,9 +23,6 @@ app.use(passport.session());
 
 app.use('/', auth(passport)) //used at every single route
 app.use('/', routes) //used at every single route
-<<<<<<< HEAD
-socket.on('connected', )
-=======
 
 //web sockets!!
 io.on('connection', socket => {
@@ -41,7 +33,6 @@ io.on('connection', socket => {
     })
   })
 })
->>>>>>> master
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, error => {

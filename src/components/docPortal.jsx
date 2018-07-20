@@ -11,15 +11,12 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
-<<<<<<< HEAD
 import io from 'socket.io';
 
-=======
 import _ from 'underscore';
 import io from 'socket.io-client';
 
 let socket = io("http://localhost:3000")
->>>>>>> master
 
 export default class docPortal extends React.Component {
   constructor(props) {
@@ -46,7 +43,6 @@ export default class docPortal extends React.Component {
     this.setState({
       [name]: event.target.value,
     });
-    socket.emit('connected', function())
   }
 
   componentWillMount(){
@@ -100,10 +96,7 @@ export default class docPortal extends React.Component {
     console.log(this.props.history)
   }
 
-<<<<<<< HEAD
   render() {
-=======
-  share(){
     fetch('http://localhost:3000/doc/share', {
       method: 'POST',
       headers: {
@@ -115,10 +108,6 @@ export default class docPortal extends React.Component {
       }),
     })
     .then(resp=>console.log(resp))
-  }
-
-  render(){
->>>>>>> master
     const classes = this.props;
     let onlyCreator = [];
     let onlyCollab = [];
@@ -156,14 +145,11 @@ export default class docPortal extends React.Component {
           Your Created Documents!
         </Typography>
         <List>
-<<<<<<< HEAD
           {this.state.docObjList.map(doc =>
             (<ListItem button key={doc._id} onClick={() => this.toEditor()}>
               <ListItemText primary={doc.docName} /></ListItem>),
-=======
           {onlyCreator.map(doc=>
             <ListItem button onClick={()=>this.toEditor(doc._id)}><ListItemText primary={doc.docName}/></ListItem>
->>>>>>> master
           )}
         </List>
         <Typography variant="title" color="inherit">

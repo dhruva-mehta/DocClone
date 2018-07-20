@@ -66,13 +66,11 @@
     "es6-promise": "^4.2.4",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
-<<<<<<< HEAD
-=======
     "http": "0.0.0",
     "io": "^1.0.0",
->>>>>>> master
     "isomorphic-fetch": "^2.2.1",
     "material-ui": "^0.20.1",
+    "materialize-css": "^1.0.0-rc.2",
     "mongoose": "^5.2.4",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
@@ -86,13 +84,9 @@
     "react-router-dom": "^4.3.1",
     "semantic-ui-react": "^0.82.0",
     "socket.io": "^2.1.1",
-<<<<<<< HEAD
-    "typeface-roboto": "0.0.54"
-=======
     "socket.io-client": "^2.1.1",
     "typeface-roboto": "0.0.54",
     "underscore": "^1.9.1"
->>>>>>> master
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
