@@ -14,7 +14,6 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
-    console.log("mounted!")
    fetch('http://localhost:3000/login')
     .then(response => response.json())
     .then(json => {

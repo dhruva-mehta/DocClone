@@ -5,12 +5,15 @@ const User = require('../models/models').User
 const Doc = require('../models/models').Doc
 
 router.post('/doc/create',function(req,res){
-  console.log(req.user)
   var doc = new Doc({
     docName: req.body.docName,
     creator: req.user._id,
     collaborators:[req.user._id],
-    content:""
+    file: [{
+      content:"",
+      date: new Date()
+    }]
+
   })
   doc.save()
   .then(save =>res.json(save))
@@ -24,8 +27,9 @@ router.get('/doc/find',function(req,res){
 })
 
 router.post('/doc/update',function(req,res){
-    console.log(req.body.content);
-    Doc.findByIdAndUpdate(req.body._id, {content: req.body.content})
+    Doc.findByIdAndUpdate(
+      req.body._id,
+      {$push: {"file": {content: req.body.content, date: new Date()}}})
     .then(doc=>{console.log(doc); res.json(doc)})
     .catch(err => console.log("Error!:"+ err))
 })
