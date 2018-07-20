@@ -2,7 +2,7 @@ import React from 'react';
 import { Editor, EditorState, RichUtils, convertFromRaw,convertToRaw, ContentState } from 'draft-js';
 import ColorPicker, { colorPickerPlugin } from 'draft-js-color-picker';
 import { Link } from 'react-router-dom';
-
+import io from 'socket.io-client';
 
 function myBlockStyleFn(contentBlock) {
   const type = contentBlock.getType();
@@ -98,23 +98,36 @@ export default class App extends React.Component {
     this.state = {
       title: "",
       editorState: EditorState.createEmpty(),
+      docid: ""
     //  doc: this.props.location.state.doc
     };
     this.onChange = editorState => {
-      this.setState({ editorState })
-    };
+      this.setState({ editorState });
+      this.props.location.state.io.on('connection', socket => {
+        socket.emit("sync",{id: this.state.docid,
+       content: JSON.stringify(convertToRaw(this.state.editorState.getCurrentContent())) } )
+      })
+    }
     this.getEditorState = () => this.state.editorState;
     this.picker = colorPickerPlugin(this.onChange, this.getEditorState);
   }
 
   componentDidMount(){
+    let self = "this";
+    console.log(  this.props.location.state.io)
+      this.props.location.state.io.on('connection', socket => {
+        socket.join(this.state.docid)
+        socket.on("sync",data=> {
+          self.setState({editorState: EditorState.createWithContent(convertFromRaw(JSON.parse(data.content)))} )
+        })
+      })
     fetch('http://localhost:3000/doc/find?_id='+this.props.location.state.id, {
       credentials: 'same-origin' // <- this is mandatory to deal with cookies
     })
     .then(resp => resp.json())
     .then(json =>{
       console.log(json.content);
-      this.setState({title:json.docName })
+      this.setState({title:json.docName, docid: json._id })
       if(json.content){
         console.log("rv there yet")
         console.log(json.content)
@@ -123,12 +136,9 @@ export default class App extends React.Component {
           editorState: EditorState.createWithContent(convertFromRaw(JSON.parse(json.content))),
         })
       }
-      // if(json.content.length>0){
-      // console.log("json is: ",json);
-      // const editorState1 = EditorState.createWithContent(JSON.parse(json.content[json.content.length-1]))
-      // console.log("edit state is", editorState1)
     }
     )
+
   }
 
   toggleInlineStyle(e, inlineStyle) {
@@ -148,8 +158,6 @@ export default class App extends React.Component {
   onSave(){
     // let saveContent = JSON.stringify(this.state.editorState.getCurrentContent())
     let saveContent = convertToRaw(this.state.editorState.getCurrentContent());
-    console.log(this.state.editorState.getCurrentContent().getPlainText())
-    console.log(saveContent);
     fetch('http://localhost:3000/doc/update', {
       method: 'POST',
       headers: {
