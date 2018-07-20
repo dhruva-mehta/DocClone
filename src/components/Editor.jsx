@@ -1,8 +1,8 @@
 import React from 'react';
-import { Editor, EditorState, RichUtils } from 'draft-js';
+import { Editor, EditorState, RichUtils, convertFromRaw,convertToRaw, ContentState } from 'draft-js';
 import ColorPicker, { colorPickerPlugin } from 'draft-js-color-picker';
 import { Link } from 'react-router-dom';
-import io from 'socket.io';
+import io from 'socket.io-client';
 
 function myBlockStyleFn(contentBlock) {
   const type = contentBlock.getType();
@@ -96,15 +96,49 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      title: "",
       editorState: EditorState.createEmpty(),
-      // doc: this.props.location.state.doc
+      docid: ""
+    //  doc: this.props.location.state.doc
     };
-    this.onChange = (editorState) => {
+    this.onChange = editorState => {
       this.setState({ editorState });
-      socket.emit('sync', { docId, editorState });
-    };
+      this.props.location.state.io.on('connection', socket => {
+        socket.emit("sync",{id: this.state.docid,
+       content: JSON.stringify(convertToRaw(this.state.editorState.getCurrentContent())) } )
+      })
+    }
     this.getEditorState = () => this.state.editorState;
     this.picker = colorPickerPlugin(this.onChange, this.getEditorState);
+  }
+
+  componentDidMount(){
+    let self = "this";
+    console.log(  this.props.location.state.io)
+      this.props.location.state.io.on('connection', socket => {
+        socket.join(this.state.docid)
+        socket.on("sync",data=> {
+          self.setState({editorState: EditorState.createWithContent(convertFromRaw(JSON.parse(data.content)))} )
+        })
+      })
+    fetch('http://localhost:3000/doc/find?_id='+this.props.location.state.id, {
+      credentials: 'same-origin' // <- this is mandatory to deal with cookies
+    })
+    .then(resp => resp.json())
+    .then(json =>{
+      console.log(json.content);
+      this.setState({title:json.docName, docid: json._id })
+      if(json.content){
+        console.log("rv there yet")
+        console.log(json.content)
+        // var blocks = convertFromRaw(json.content);
+        this.setState({
+          editorState: EditorState.createWithContent(convertFromRaw(JSON.parse(json.content))),
+        })
+      }
+    }
+    )
+
   }
 
   toggleInlineStyle(e, inlineStyle) {
@@ -116,11 +150,37 @@ export default class App extends React.Component {
     e.preventDefault();
     this.onChange(RichUtils.toggleBlockType(this.state.editorState, blockType));
   }
+
+  // toggleFontSize(e, size) {
+  //   e.preventDefault();
+  //   this.onChange();
+  // }
+  onSave(){
+    // let saveContent = JSON.stringify(this.state.editorState.getCurrentContent())
+    let saveContent = convertToRaw(this.state.editorState.getCurrentContent());
+    fetch('http://localhost:3000/doc/update', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'same-origin', // <- this is mandatory to deal with cookies
+      body: JSON.stringify({
+        _id: this.props.location.state.id,
+        content: JSON.stringify(saveContent),
+      })
+    })
+    .then(resp=>resp.json())
+    .then(json=>console.log('it worked!'+ json))
+  }
+
+
   render() {
     return (
       <div className="editorPage">
-        {/* <h2>{this.state.doc.docName}</h2> */}
+        <h2>{this.state.title}</h2>
         <div className="toolbar">
+          <button className="btn" onClick={()=>this.onSave()}>Save</button>
+          <button className="btn" onClick={()=>this.props.history.goBack()}>Back</button>
           <button className="btn" onClick={e => this.toggleInlineStyle(e, 'BOLD')}><i className="fa fa-bold" /></button>
           <button className="btn" onClick={e => this.toggleInlineStyle(e, 'ITALIC')}><i className="fa fa-italic" /></button>
           <button className="btn" onClick={e => this.toggleInlineStyle(e, 'UNDERLINE')}><i className="fa fa-underline" /></button>
@@ -156,12 +216,6 @@ export default class App extends React.Component {
             customStyleMap={styleMap}
             blockStyleFn={myBlockStyleFn}
           />
-        </div>
-        <div>
-          <button><Link to={{ pathname: '/docPortal' }}>Back to portal</Link></button>
-          <button className="btn">
-            <i className="fa fa-floppy-o" />
-          </button>
         </div>
       </div>
     );
