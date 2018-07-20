@@ -11,6 +11,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
+import _ from 'underscore'
 
 
 
@@ -20,7 +21,9 @@ export default class docPortal extends React.Component {
     this.state = {
       username: "",
       newDocName:"",
-      docObjList:[]
+      docObjList:[],
+      shareDoc:"",
+      userid:"",
     };
   }
 
@@ -31,13 +34,14 @@ export default class docPortal extends React.Component {
     .then(resp => resp.json())
     .then(json =>
     this.setState({ docObjList: json }));
-  }
-  ange(name, event) {
+}
+
+  handleChange(name, event) {
     this.setState({
       [name]: event.target.value,
     });
   }
-  
+
   componentWillMount(){
     fetch('http://localhost:3000/doc',{
         credentials: 'same-origin',
@@ -53,7 +57,7 @@ export default class docPortal extends React.Component {
     })
     .then(resp => resp.json())
     .then(json=>
-      this.setState({username: json.user.username}))
+      this.setState({username: json.user.username, userid:json.user._id}))
   }
 
   newDoc(){
@@ -78,13 +82,43 @@ export default class docPortal extends React.Component {
     }
   }
 
-  toEditor(){
-    this.props.history.push('/editor')
+  toEditor(id){
+    this.props.history.push({
+           pathname:"/editor",
+           state:{
+               id:id //access with: this.props.location.state.name
+            }
+          });
     console.log(this.props.history)
+  }
+
+  share(){
+    fetch('http://localhost:3000/doc/share', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'same-origin', // <- this is mandatory to deal with cookies
+      body: JSON.stringify({
+        _id:this.state.shareDoc,
+      }),
+    })
+    .then(resp=>console.log(resp))
   }
 
   render(){
     const classes = this.props;
+    let onlyCreator = [];
+    let onlyCollab = [];
+     _.each(this.state.docObjList, obj => {
+       if(obj.creator===this.state.userid){
+         onlyCreator.push(obj)
+       }
+       else {
+         onlyCollab.push(obj)
+       }
+    })
+
     return (
       <div className={classes.root}>
         <AppBar position="static">
@@ -107,13 +141,30 @@ export default class docPortal extends React.Component {
         />
         <button onClick={() => this.newDoc()}>Create New Doc!</button>
         <Typography variant="title" color="inherit">
-          Your Documents!
+          Your Created Documents!
         </Typography>
         <List>
-          {this.state.docObjList.map(doc=>
-            <ListItem button onClick={()=>this.toEditor()}><ListItemText primary={doc.docName}/></ListItem>
+          {onlyCreator.map(doc=>
+            <ListItem button onClick={()=>this.toEditor(doc._id)}><ListItemText primary={doc.docName}/></ListItem>
           )}
         </List>
+        <Typography variant="title" color="inherit">
+          Collaborating on these Docs!
+        </Typography>
+        <List>
+          {onlyCollab.map(doc=>
+            <ListItem button onClick={()=>this.toEditor(doc._id)}><ListItemText primary={doc.docName}/></ListItem>
+          )}
+        </List>
+        <TextField
+          id="shareDoc"
+          label="shareDoc"
+          className={classes.textField}
+          value={this.state.shareDoc}
+          onChange={event => this.handleChange('shareDoc', event)}
+          margin="normal"
+        />
+        <button onClick={() => this.share()}>Enter Document ID to get added to a Doc!</button>
       </div>
     );
   }
